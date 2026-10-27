@@ -4379,7 +4379,7 @@ function lobbyOwn(){const p=MPL.slots.length,n=lobbyN(),o=MPL.ownOv;   /* ručn�
 /* Y: hráč si vezme další postavu (opakovaný stisk vybírá dál). Komu by nezbyla žádná, dostane náhradu od hráče, který má postav víc. */
 function lobbyTake(si){const own=lobbyOwn(),n=lobbyN(),mine=own[si];if(own.length<2)return false;
   const last=MPL.takeLast&&MPL.takeLast[si];
-  if(last&&mine.includes(last.c)&&own[last.from]){mine.splice(mine.indexOf(last.c),1);own[last.from].push(last.c);}   /* vrátit tu, co jsem si vzal minule */
+  if(last&&mine.includes(last.c)&&own[last.from]){mine.splice(mine.indexOf(last.c),1);own[last.from].unshift(last.c);}   /* vrátit tu, co jsem si vzal minule (domů, na začátek) */
   const start=last?last.c:(mine[mine.length-1]??-1),cands=[];for(let k=1;k<=n;k++){const c=(start+k+n)%n;if(lobbyAlive(c)&&!mine.includes(c)&&!cands.includes(c))cands.push(c);}
   if(last&&cands.length&&cands[0]===last.c&&cands.length>1)cands.push(cands.shift());
   const c=cands[0];if(c==null)return false;const from=own.findIndex(l=>l.includes(c));
