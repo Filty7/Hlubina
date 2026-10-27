@@ -2,8 +2,8 @@
 <html lang="cs">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hlubina</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hlubina · online multiplayer beta</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500;700&display=swap">
 <style>
@@ -938,6 +938,35 @@ p,small,li,em,.hint,.clore,.cdesc{text-wrap:pretty}
 .rstamp.evst:not(.crit){color:#b0281e;border-color:#b0281e}
 @keyframes evst{to{opacity:.95;transform:rotate(-14deg) scale(1)}}
 .cdesc .cdl{display:block;padding-left:14px;position:relative}.cdesc .cdl::before{content:'–';position:absolute;left:2px}
+
+/* online */
+.betatag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:var(--lamp);color:#111;border-radius:4px;padding:1px 5px;vertical-align:middle;margin-left:4px}
+.netjoin{display:flex;flex-direction:column;gap:6px;margin:14px 0 4px;padding-top:12px;border-top:1px dashed rgba(255,255,255,.15)}
+.neterr{color:#ff8a6a}
+.netcodebox{margin-top:10px;font-size:15px;opacity:.9;display:flex;flex-direction:column;align-items:center;gap:2px}
+.netcode{font-family:var(--display);font-size:46px;letter-spacing:.25em;color:var(--lamp);user-select:all;padding-left:.25em}
+.netcodebox small{opacity:.7}
+.netpls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.netpl{border:2px solid var(--pc);border-radius:8px;padding:6px 12px;display:flex;flex-direction:column;min-width:130px;background:rgba(0,0,0,.25)}
+.netpl small{opacity:.8}
+.netchs{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px 0}
+.netch{border:2px solid var(--pc);border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;width:150px;background:rgba(0,0,0,.25)}
+.netch.mine{box-shadow:0 0 0 2px var(--pc),0 0 14px var(--pc)}
+.netch.dead{opacity:.45}
+.netch .pimg{width:64px;height:64px;image-rendering:pixelated}
+.netch .lnm{font-family:var(--display);font-size:17px;font-weight:700;background:transparent;border:0;border-bottom:1px dashed rgba(255,255,255,.3);text-align:center;width:120px;outline:none}
+#netbar{position:fixed;top:62px;left:50%;transform:translateX(-50%);z-index:60;display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:center;background:rgba(10,12,14,.82);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:3px 10px;font-size:13px;pointer-events:none;max-width:92vw}
+#netbar .nb-k{color:var(--lamp);font-weight:700;letter-spacing:.06em}
+#netbar .nb-p{border-bottom:2px solid var(--pc);padding:0 3px}#netbar .nb-p.me{font-weight:700}#netbar .nb-p.off{opacity:.45}
+#netbar .nb-w{color:#ffd98a}
+#marks.netlock{visibility:hidden}
+#actions.netlock button{opacity:.35;pointer-events:none}
+.netwho{font-size:14px;padding:4px 6px;opacity:.9}
+#mbox .netready{background:#3a4a2a;color:#cfe8a8}
+#nettoast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:rgba(20,20,24,.92);border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:8px;z-index:80;opacity:0;transition:opacity .2s;pointer-events:none}
+#nettoast.on{opacity:1}
+#netlost{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center}
+#netlost>div{background:#1a1d20;border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px 26px;max-width:420px;text-align:center}
 </style>
 
 <div id="app">
@@ -3246,8 +3275,9 @@ function setupCamera(){
 }
 
 /* ================= MENU, ULOŽENÍ, PRAVIDLA ================= */
-const VERSION='0.70';
+const VERSION='0.80-beta';
 const CHANGELOG=[
+  ['0.80-beta','Online multiplayer (beta)',['Nová položka v menu Online multiplayer: hostitel založí novou výpravu, pokračuje v rozehrané nebo načte uloženou a dostane kód hry. Kamarádi se připojí přes Připojit se a zadají kód.','Každý hraje na svém počítači myší a klávesnicí. V online lobby si hráči klikem vezmou postavy a přepíšou jim jména. Hra začne, až má každý aspoň jednu postavu.','Celá hra běží u hostitele a ukládá se u něj. Ostatní ovládají jen své postavy a na konci levelu potvrdí, že jsou hotoví. Plán laboratoře a dialogy ovládá hostitel.','Když se hráč odpojí, může se vrátit stejným kódem a jménem. Do té doby za jeho postavy hraje hostitel.','Hra pro jednoho a lokální multiplayer s ovladači fungují dál úplně stejně a bez internetu.']],
   ['0.70','Uložené hry a jména',['Uložit hru (v menu během výpravy): pojmenovaná uložená hra v prohlížeči a volitelně i jako soubor .json. Rozehraná hra z předchozích verzí zůstává a Pokračovat ji načte jako dřív.','Hra pro jednoho i Multiplayer mají Načíst uloženou hru: seznam uložených her s detaily, stažení, smazání a načtení ze souboru. Načtenou hru jde hrát sólo i v multiplayeru.','Multiplayer si pamatuje, kdo hrál za které postavy. Při pokračování dostane každý hráč zpátky své postavy podle pořadí přihlášení. V lobby si každý může vzít kteroukoli postavu: Y otevře výběr, páčkou vybere, A potvrdí, B zruší. Hra začne, až má každý hráč aspoň jednu postavu.','Jména postav jde přepsat myší a klávesnicí v lobby i na konci levelu, X dá náhodné jméno.','V multiplayeru jsou postavy jednoho hráče v dolní liště vedle sebe.','Automatická kamera: výběr postavy v dolní liště (nebo LB / RB) ji plynule vycentruje. Při pádu kamera počká nahoře a pak jede s postavou dolů. Testy, střílna, potrubí a karanténa se posunou doprostřed obrazovky.']],
   ['0.69','Stopař a střílna',['Stopař má výměny dílku 1 / 2 / 3× za každý level (dřív za celou výpravu).','Střílnu spustí i přízrak, který vstoupí do laseru. Trefí první postavu nebo přízrak v cestě.']],
   ['0.68','Ladění typů levelů a střílny',['Ztracení: každý začíná v jiném rohu (nahoře a patro nad dnem; ve dvou šikmo, ve třech dva nahoře a jeden dole, ve čtyřech všechny rohy), voda začíná úplně dole, zóna je uprostřed.','Na dohled: zóna se zařízením je 4 × 2 a dotýká se dna.','Tma: vidíš 2 kroky po chodbách (ne vzdušnou čarou). Dílky mimo dosah se po chvíli zatáhnou do úplné tmy s texturou (zůstane jen křídový obrys chodeb, ať víš, kde už jsi byl) a při přiblížení se zase vynoří. Nic z nich neprosvítá: přízraky, lasery, záře ani světlo z chodeb.','Dusno: kyslík se přesune až po stoupnutí vody a jsou jen 2 řady bez kyslíku. Na začátku nikdy v řadě, kde stojí postavy. Oheň odhalený bez kyslíku hned zhasne.','Střílna trefí první postavu nebo přízrak v cestě, ať laser spustil kdokoli. Při testu bliká jen laser ve směru spuštění, ostatní na chvíli zhasnou. Střílna i test radiace počkají, až postava dojde (i po rozvinutí žebříku).','Kryt: postava v něm stojí v suchu i pod hladinou. Kratší popisek a popisky dílků jsou vždy nahoře.','Sliz zraní hned při vstupu, až potom přijde pád šachtou. Prasklé potrubí spustí i ten, kdo jím jen propadne.','Teleport se počítá jako vstup na pole (střílna vystřelí). Střílna nevidí do krytu ani přes zavřené dveře pasti. Jádro radiace nemá prkna nad šachtou.','Kantýna + jádro radiace: nejdřív přibudou akce, jádro pak sebere tu poslední.','Razítko u události jen při kritickém zásahu (u dynamitu už ne).','Stopař: tlačítko ⇄ na odhaleném dílku vedle otočení (na ovladači X), dílek počká i když jde natočit jen jedním směrem. Zával ve tmě se neanimuje, jen je slyšet. Při ošetřování svítí postavy, které jde ošetřit, a po najetí myší ta vybraná.']],
@@ -3321,6 +3351,7 @@ function showMenu(sub){
     <div class="mbtns">
       <button class="mbtn primary" data-menu="sp">Hra pro jednoho<small>${sv&&sv.RUN.chars.some(r=>r.alive)?'pokračovat nebo nová výprava':'myš nebo ovladač'}</small></button>
       <button class="mbtn" data-menu="mp">Multiplayer<small>2–4 hráči · ovladače</small></button>
+      <button class="mbtn" data-menu="net">Online multiplayer <span class="betatag">beta</span><small>hraj s kamarády přes internet · kód hry</small></button>
       <button class="mbtn" data-menu="tut">Tutoriál<small>krok za krokem první výprava</small></button>
       <button class="mbtn" data-menu="rules">Pravidla<small>sešit pravidel jako u deskové hry</small></button>
       <button class="mbtn" data-menu="scores">Tabulka výprav<small>nejlepší skóre</small></button>
@@ -3441,6 +3472,7 @@ function setupMenu(){
     else if(k==='save')showSaveScreen('menu');
     else if(k==='loadsp')showLoadScreen('sp');
     else if(k==='loadmp')showLoadScreen('mp');
+    else if(k==='net')showNetMenu();
     else if(k==='log')showChangelog();
     else if(k==='scores')showScores();
     else if(k==='test')showTestSetup();
@@ -4552,7 +4584,7 @@ function shopInput(evs){
       else if(!st.arm){st.arm=true;SF('tick');}
       else{st.arm=false;cur.click();}}});
   const need=MP.own.map((l,s)=>(l||[]).some(c=>RUN.chars[c]&&RUN.chars[c].alive)?s:-1).filter(s=>s>=0);
-  if(need.length&&need.every(s=>MP.ready[s])){MP.ready=[];MP.shop=[];const nx=mb.querySelector('[data-a="nextlvl"]');if(nx)nx.click();}
+  if(need.length&&need.every(s=>MP.ready[s])){MP.ready=[];MP.shop=[];const nx=mb.querySelector('[data-a="nextlvl"]');if(nx){NET.bypassNext=true;nx.click();NET.bypassNext=false;}}
 }
 function shopMarks(){
   if(!MP.on)return;const mb=document.getElementById('mbox'),tags=new Map(),tg=new Map();
@@ -4599,6 +4631,7 @@ function gpHint(ctx,any){let el=document.getElementById('gphint');
   el.hidden=!t;el.innerHTML=t;el.classList.toggle('bot',ctx!=='game');}
 function gpLoop(){try{gpStep();}catch(e){console.error(e);}requestAnimationFrame(gpLoop);}
 function gpStep(){
+  if(NET.role==='guest'&&NET.started)return;
   const pads=gpList();
   if(pads.length){
     const evs=pads.map(gpRead),ctx=ctxNow();
@@ -4654,11 +4687,12 @@ function showSaveScreen(back){const d=liveSaveData(),m=menuEl();m.hidden=false;U
 function showLoadScreen(mode){const m=menuEl();m.hidden=false;UI.inMenu=true;UI.loadMode=mode;const a=loadSlots();
   const row=s=>`<div class="ldrow"><div class="ldinfo"><b>${escH(s.name)}</b><small>${escH(saveSummary(s.data))}</small><small class="ldd">${fmtDate(s.ts)} · verze ${escH(s.v||'?')}</small></div>
     <div class="ldbtn"><button class="mbtn sm primary" data-ld="${s.id}">Načíst</button><button class="mbtn sm" data-ldf="${s.id}" title="Stáhnout jako soubor">⤓</button><button class="mbtn sm" data-ldx="${s.id}" title="Smazat">✕</button></div></div>`;
-  m.innerHTML=`<div class="mwrap wide"><div class="mtitle"><span class="mt-k">${mode==='mp'?'MULTIPLAYER':'HRA PRO JEDNOHO'}</span><h1 style="font-size:40px">Načíst uloženou hru</h1><p>Načtená výprava se dá hrát sólo i v multiplayeru. Stane se z ní poslední hra, takže pak pokračuje i přes Pokračovat.</p></div>
+  m.innerHTML=`<div class="mwrap wide"><div class="mtitle"><span class="mt-k">${mode==='mp'?'MULTIPLAYER':mode==='net'?'ONLINE MULTIPLAYER':'HRA PRO JEDNOHO'}</span><h1 style="font-size:40px">Načíst uloženou hru</h1><p>Načtená výprava se dá hrát sólo i v multiplayeru. Stane se z ní poslední hra, takže pak pokračuje i přes Pokračovat.</p></div>
     <div class="ldlist">${a.length?a.map(row).join(''):'<p class="hint">V tomhle prohlížeči zatím žádná uložená hra není.</p>'}</div>
     <div class="mbtns" style="margin-top:12px"><button class="mbtn" data-ldfile="1">Načíst ze souboru…<small>.json uložený dřív tlačítkem Uložit jako soubor</small></button><button class="mbtn ghost" data-menu="${mode}">Zpět</button></div>
     <input type="file" id="ldFile" accept=".json,application/json" hidden><div id="ldMsg" class="hint"></div></div>`;}
 function startLoaded(d){if(!useSave(d)){const e=document.getElementById('ldMsg');if(e)e.textContent='Hru se nepodařilo načíst (plné úložiště prohlížeče).';return;}
+  if(UI.loadMode==='net'){netHost('cont');return;}
   if(UI.loadMode==='mp')showLobby('cont');else{MP.on=false;continueRun();}}
 function validSave(d){return d&&d.RUN&&Array.isArray(d.RUN.chars)&&d.RUN.chars.length&&(d.G==null||Array.isArray(d.G.board));}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-sv],[data-ld],[data-ldf],[data-ldx],[data-ldfile],[data-rrnd]');if(!b)return;
@@ -5155,5 +5189,282 @@ function boot(){
   requestAnimationFrame(loop);
 }
 if(typeof document!=='undefined')boot();
+/* ================= ONLINE MULTIPLAYER (beta) =================
+   Host je „pravda“: celá hra běží u hosta, hosté jen zobrazují stav a posílají kliknutí.
+   Přenos: Supabase Realtime (broadcast kanál = kód hry). Pro testy ?netlocal=1 → BroadcastChannel mezi záložkami.
+   Bez online se nic nemění: hra pro jednoho i lokální multiplayer běží offline jako dřív. */
+const NET={role:null,code:null,id:Math.random().toString(36).slice(2,10),name:'',tr:null,players:[],started:false,lobby:null,hostId:null,
+  q:[],lastSt:'',stT:0,hb:0,hostSeen:0,snapG:null,snapFr:null,snapDirty:false,injecting:false,lvlKey:'',modalFromHost:false,bypassNext:false};
+const NET_LOCAL=/[?&]netlocal=1/.test(location.search);
+const SB_RT={url:'https://ttgjzbpglgerxvbmaqdt.supabase.co',key:'sb_publishable_MDCkjnVd2_hNMKLfJZq4JQ_pSoVWmiv',
+  libs:['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.97.0','https://unpkg.com/@supabase/supabase-js@2.97.0','https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.97.0/dist/umd/supabase.js']};
+const NET_COLS=['#ffd23a','#5ad0ff','#ff7ad0','#7dff8a'];
+function netOn(){return !!NET.role;}
+function loadScript(u){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=u;s.async=true;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
+async function netTransport(code,onMsg){
+  if(NET_LOCAL){const bc=new BroadcastChannel('hlubina-net-'+code);bc.onmessage=e=>onMsg(e.data);return {send:m=>bc.postMessage(m),close:()=>bc.close()};}
+  if(!(window.supabase&&window.supabase.createClient)){for(const u of SB_RT.libs){try{await loadScript(u);if(window.supabase&&window.supabase.createClient)break;}catch(e){}}}
+  if(!(window.supabase&&window.supabase.createClient))throw new Error('Nepodařilo se načíst knihovnu pro online hru.');
+  const cl=NET.sb||(NET.sb=window.supabase.createClient(SB_RT.url,SB_RT.key,{realtime:{params:{eventsPerSecond:20}}}));
+  const ch=cl.channel('hlubina-'+code,{config:{broadcast:{self:false,ack:false}}});
+  ch.on('broadcast',{event:'m'},msg=>{if(msg&&msg.payload)onMsg(msg.payload);});
+  await new Promise((res,rej)=>{const t=setTimeout(()=>rej(new Error('Spojení se nepodařilo navázat (vypršel čas).')),12000);
+    ch.subscribe(st=>{if(st==='SUBSCRIBED'){clearTimeout(t);res();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){clearTimeout(t);rej(new Error('Spojení se nepodařilo navázat ('+st+').'));}});});
+  return {send:m=>{try{ch.send({type:'broadcast',event:'m',payload:m});}catch(e){}},close:()=>{try{cl.removeChannel(ch);}catch(e){}}};}
+function netSend(m){if(!NET.tr)return;m.from=NET.id;try{NET.tr.send(m);}catch(e){}}
+function netCode(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<5;i++)s+=A[Math.floor(Math.random()*A.length)];return s;}
+function netName(){try{return localStorage.getItem('hlubina-netname')||'';}catch(e){return '';}}
+function netSetName(v){NET.name=String(v||'').trim().slice(0,16)||'Hráč';try{localStorage.setItem('hlubina-netname',NET.name);}catch(e){}}
+
+/* ---------- menu ---------- */
+function showNetMenu(err){const m=menuEl();m.hidden=false;UI.inMenu=true;MPL=null;const sv=loadSave(),nm=netName();
+  m.innerHTML=`<div class="mwrap"><div class="mtitle"><span class="mt-k">BETA · ONLINE</span><h1 style="font-size:42px">Online multiplayer</h1><p>Hostitel založí hru a pošle kamarádům kód. Každý hraje na svém počítači myší a klávesnicí, hostitel může i ovladačem. Hra pro jednoho a lokální multiplayer fungují dál i bez internetu.</p></div>
+    <label class="svlab">Tvoje jméno<input id="netName" maxlength="16" value="${escH(nm)}" placeholder="např. Tomáš"></label>
+    <div class="mbtns"><button class="mbtn primary" data-net="hostnew">Založit novou online výpravu<small>dostaneš kód pro kamarády</small></button>
+      ${sv&&sv.RUN&&sv.RUN.chars.some(r=>r.alive)?`<button class="mbtn" data-net="hostcont">Pokračovat online<small>${escH(saveSummary(sv))}</small></button>`:''}
+      <button class="mbtn" data-net="hostload">Načíst uloženou hru online<small>vybereš ze seznamu nebo ze souboru</small></button></div>
+    <div class="netjoin"><label class="svlab">Kód hry od hostitele<input id="netCode" maxlength="6" placeholder="např. K7QXA" style="text-transform:uppercase;letter-spacing:.2em"></label><button class="mbtn" data-net="join">Připojit se<small>do hry, kterou založil kamarád</small></button></div>
+    ${err?`<p class="neterr">${escH(err)}</p>`:''}
+    <div class="mbtns"><button class="mbtn ghost" data-menu="menu">Zpět</button></div><div class="mver">verze ${VERSION}</div></div>`;}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-net]');if(!b)return;SF('card');const k=b.dataset.net;
+  const ni=document.getElementById('netName');if(ni)netSetName(ni.value);
+  if(k==='hostnew')netHost('new');else if(k==='hostcont')netHost('cont');else if(k==='hostload')showLoadScreen('net');
+  else if(k==='join'){const c=(document.getElementById('netCode')||{}).value||'';if(c.trim().length<4){showNetMenu('Zadej kód hry.');return;}netJoin(c);}});
+
+/* ---------- lobby ---------- */
+function netLobbyN(){const L=NET.lobby;return L.mode==='cont'?L.sv.RUN.chars.length:DIFF[L.diff].n;}
+function netAlive(c){const L=NET.lobby;return L.mode!=='cont'||L.sv.RUN.chars[c].alive;}
+function netLobbyChars(){const L=NET.lobby,n=netLobbyN(),r=[];for(let c=0;c<n;c++){const R=L.mode==='cont'?L.sv.RUN.chars[c]:null;r.push({cid:c,name:R?R.name:L.names[c],color:R?R.color:CHARS[c].color,alive:netAlive(c)});}return r;}
+function netDefaultOwn(){const L=NET.lobby,p=NET.players.length,n=netLobbyN(),own=NET.players.map(()=>[]);if(!p)return own;
+  const mo=L.mode==='cont'&&L.sv.RUN.mpOwn;if(mo&&mo.length===p){const o=mo.map(l=>(l||[]).filter(c=>c<n&&netAlive(c)));if(o.every(l=>l.length))return o;}
+  let j=0;for(let c=0;c<n;c++)if(netAlive(c))own[(j++)%p].push(c);return own;}
+function netFixOwn(){const L=NET.lobby,p=NET.players.length,n=netLobbyN();let o=L.own;
+  const ok=o&&o.length===p&&(()=>{const all=o.flat();if(all.length!==new Set(all).size)return false;for(let c=0;c<n;c++)if(netAlive(c)&&!all.includes(c))return false;return all.every(c=>c<n&&netAlive(c));})();
+  if(!ok)L.own=netDefaultOwn();}
+function netLobbyValid(){const L=NET.lobby;return NET.players.length>=2&&L.own.every(l=>l.length);}
+function netLobbyState(){const L=NET.lobby;return {t:'lobby',code:NET.code,v:VERSION,players:NET.players.map(p=>({id:p.id,name:p.name,on:p.on!==false})),mode:L.mode,diff:L.diff,chars:netLobbyChars(),own:L.own,summary:L.sv?saveSummary(L.sv):''};}
+function netBroadcastLobby(){if(NET.role!=='host'||NET.started)return;netFixOwn();netSend(netLobbyState());renderNetLobby(netLobbyState());}
+async function netHost(mode){netReset();NET.role='host';NET.code=netCode();if(!NET.name)netSetName(netName());NET.players=[{id:NET.id,name:NET.name||'Hostitel',on:true,seen:Date.now()}];
+  const sv=mode==='cont'?loadSave():null;
+  NET.lobby={mode:sv?'cont':'new',diff:sv?(sv.RUN.diff||'normal'):'normal',sv,names:(()=>{const p=shuffle(NAMES.slice());return CHARS.map((c,i)=>p[i]);})(),own:null};
+  renderNetLobby(null,'Zakládám online hru…');
+  try{NET.tr=await netTransport(NET.code,netOnMsg);}catch(e){netReset();showNetMenu(e.message||'Online hru se nepodařilo založit.');return;}
+  netBroadcastLobby();netBeat();}
+async function netJoin(code){netReset();NET.role='guest';NET.code=String(code).toUpperCase().replace(/[^A-Z0-9]/g,'');if(!NET.name)netSetName(netName());
+  renderNetLobby(null,'Připojuji se ke hře '+NET.code+'…');
+  try{NET.tr=await netTransport(NET.code,netOnMsg);}catch(e){netReset();showNetMenu(e.message||'Připojení se nepodařilo.');return;}
+  netSend({t:'hello',name:NET.name,v:VERSION});NET.joinT=setTimeout(()=>{if(NET.role==='guest'&&!NET.hostId){const c=NET.code;netReset();showNetMenu(`Hru s kódem ${c} jsem nenašel. Je hostitel v lobby a máte stejný kód?`);}},9000);
+  netBeat();}
+function netReset(){try{if(NET.tr){netSend({t:'bye'});NET.tr.close();}}catch(e){}clearInterval(NET.hb);clearTimeout(NET.joinT);
+  Object.assign(NET,{role:null,code:null,tr:null,players:[],started:false,lobby:null,hostId:null,q:[],lastSt:'',hb:0,hostSeen:0,snapG:null,modalFromHost:false});const b=document.getElementById('netbar');if(b)b.remove();}
+function renderNetLobby(st,wait){const m=menuEl();m.hidden=false;UI.inMenu=true;MPL=null;
+  if(!st){m.innerHTML=`<div class="mwrap"><div class="mtitle"><span class="mt-k">ONLINE · BETA</span><h1 style="font-size:40px">Online výprava</h1><p>${escH(wait||'')}</p></div><div class="mbtns"><button class="mbtn ghost" data-nleave="1">Zrušit</button></div></div>`;return;}
+  const host=NET.role==='host',meIdx=st.players.findIndex(p=>p.id===NET.id),ae=document.activeElement,keep=ae&&ae.dataset&&ae.dataset.nnm!=null?{k:ae.dataset.nnm,s:ae.selectionStart,e:ae.selectionEnd}:null;
+  const ownerOfC=c=>st.own.findIndex(l=>l.includes(c));
+  const pl=st.players.map((p,i)=>`<div class="netpl" style="--pc:${NET_COLS[i]}"><b>${i===0?'👑 ':''}${escH(p.name)}</b><small>${i===0?'hostitel':'hráč '+(i+1)}${p.on?'':' · odpojen'}${p.id===NET.id?' · ty':''}</small><small>${st.own[i]&&st.own[i].length?st.own[i].map(c=>escH(st.chars[c].name)).join(', '):'<span class="neterr">bez postavy</span>'}</small></div>`).join('');
+  const ch=st.chars.map(c=>{const o=ownerOfC(c.cid),mine=o===meIdx;return `<div class="netch ${c.alive?'':'dead'} ${mine?'mine':''}" style="--pc:${o>=0?NET_COLS[o]:'#555'}"><img class="pimg" src="${portraitURL({color:c.color})}" alt="">
+    ${mine&&c.alive?`<input class="lnm" data-nnm="${c.cid}" maxlength="14" value="${escH(c.name)}" style="color:${shade(c.color,.35)}" title="Přepiš jméno">`:`<b style="color:${shade(c.color,.35)}">${escH(c.name)}${c.alive?'':' †'}</b>`}
+    <small>${c.alive?(o>=0?escH(st.players[o].name):'nikdo'):'ztracen(a)'}</small>${c.alive&&!mine?`<button class="mbtn sm" data-ntake="${c.cid}">Vzít</button>`:''}</div>`;}).join('');
+  const dsel=st.mode==='new'?`<div class="dsel">${['easy','normal','hard'].map(k=>`<button class="mbtn sm dbtn ${k===st.diff?'on':''}" ${host?`data-ndiff="${k}"`:'disabled'}>${DIFF[k].name}<small>${DIFF[k].n} postavy · ${DIFF[k].hp} životů</small></button>`).join('')}</div>`:`<p class="hint" style="text-align:center">Pokračování: ${escH(st.summary||'')}</p>`;
+  const miss=st.players.map((p,i)=>st.own[i]&&st.own[i].length?null:p.name).filter(Boolean);
+  m.innerHTML=`<div class="mwrap wide"><div class="mtitle"><span class="mt-k">ONLINE · BETA</span><h1 style="font-size:40px">${st.mode==='cont'?'Online pokračování':'Online výprava'}</h1>
+    <div class="netcodebox">Kód hry <span class="netcode">${escH(st.code)}</span>${host?'<small>pošli ho kamarádům, připojí se v Online multiplayer → Připojit se</small>':''}</div></div>
+    <div class="netpls">${pl}</div>${dsel}<div class="netchs">${ch}</div>
+    <p class="hint" style="text-align:center">Klikni na <b>Vzít</b> u postavy, kterou chceš hrát. Jména svých postav můžeš přepsat. ${miss.length?`<b class="neterr">Bez postavy: ${miss.map(escH).join(', ')}.</b>`:''}</p>
+    <div class="mbtns" style="margin-top:8px">${host?`<button class="mbtn primary" data-nstart="1" ${netLobbyValid()?'':'disabled'}>Spustit hru<small>${st.players.length<2?'čeká se na aspoň jednoho kamaráda':miss.length?'každý hráč musí mít aspoň jednu postavu':'všichni jsou připraveni'}</small></button>`:'<p class="hint" style="text-align:center">Hru spustí hostitel.</p>'}
+      <button class="mbtn ghost" data-nleave="1">${host?'Zrušit online hru':'Odejít'}</button></div></div>`;
+  if(keep){const el=m.querySelector(`[data-nnm="${keep.k}"]`);if(el){el.focus();try{el.setSelectionRange(keep.s,keep.e);}catch(e){}}}}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-ntake],[data-ndiff],[data-nstart],[data-nleave]');if(!b||!b.closest('#menu'))return;SF('card');
+  if(b.dataset.nleave){netReset();showNetMenu();return;}
+  if(NET.role==='host'){
+    if(b.dataset.ntake!=null){netTake(0,+b.dataset.ntake);return;}
+    if(b.dataset.ndiff){NET.lobby.diff=b.dataset.ndiff;NET.lobby.own=null;netBroadcastLobby();return;}
+    if(b.dataset.nstart){if(netLobbyValid())netStart();return;}}
+  else if(NET.role==='guest'&&b.dataset.ntake!=null)netSend({t:'ltake',cid:+b.dataset.ntake});});
+document.addEventListener('input',e=>{const t=e.target;if(!t||!t.dataset||t.dataset.nnm==null||!NET.role)return;const v=t.value.trim().slice(0,14);if(!v)return;const cid=+t.dataset.nnm;
+  if(NET.role==='host')netRename(0,cid,v,true);else netSend({t:'lname',cid,name:v});});
+function netTake(p,c){const L=NET.lobby;if(!L||NET.started||!netAlive(c))return;netFixOwn();L.own.forEach(l=>{const k=l.indexOf(c);if(k>=0)l.splice(k,1);});(L.own[p]=L.own[p]||[]).push(c);netBroadcastLobby();}
+function netRename(p,cid,name,lobby){if(!NET.started){const L=NET.lobby;if(!L||!(L.own[p]||[]).includes(cid))return;if(L.mode==='cont')L.sv.RUN.chars[cid].name=name;else L.names[cid]=name;clearTimeout(NET.lnT);NET.lnT=setTimeout(netBroadcastLobby,lobby?400:150);return;}
+  if(!(MP.own[p]||[]).includes(cid)||!RUN)return;const r=RUN.chars[cid];if(!r)return;r.name=name;if(G&&G.chars[cid])G.chars[cid].name=name;const inp=document.querySelector(`[data-rn="${cid}"]`);if(inp&&document.activeElement!==inp)inp.value=name;netQueueState();}
+
+/* ---------- start ---------- */
+function netStart(){const L=NET.lobby;netFixOwn();const own=L.own.map(l=>l.slice());NET.started=true;
+  endTut();
+  if(L.mode==='new'){RUN=null;newRun(L.names.slice(),L.diff);RUN.mp=true;clearSave();UI.live=true;hideMenu();closeModal();}
+  else{try{localStorage.setItem('hlubina-save',JSON.stringify(L.sv));}catch(e){}continueRun();if(RUN)RUN.mp=true;}
+  if(RUN)RUN.mpOwn=own.map(l=>l.slice());
+  const pads=gpList();MP.on=true;MP.gp=own.map((_,i)=>i===0?(pads[0]?pads[0].index:-1):-100-i);MP.own=own;MP.lead=0;MP.shop=[];MP.ready=[];GPF.key=null;GPF.menu=false;
+  netSend({t:'start',own,players:NET.players.map(p=>({id:p.id,name:p.name}))});SF('portal');
+  if(L.mode==='new')showMap();
+  if(G&&!UI.onMap)render();netBar();netQueueState(true);}
+function netGuestStart(m){NET.started=true;NET.players=m.players;MP.on=true;MP.own=m.own;MP.gp=[];MP.lead=0;
+  /* host je pravda: u hosta se nic nepočítá, jen zobrazuje */
+  NET.orig=NET.orig||{};['settle','applyGravity','checkOver','endAllTurns','showOver','saveGame','clearSave','beginLevel','nextLevel','undo','showVictory','recordScore','renderShop','buyAbility'].forEach(f=>{if(!(f in NET.orig))NET.orig[f]=window[f];});
+  ['settle','applyGravity','checkOver','endAllTurns','showOver','saveGame','clearSave','beginLevel','nextLevel','undo','showVictory'].forEach(f=>{try{window[f]=function(){};}catch(e){}});
+  try{window.recordScore=function(){return null;};}catch(e){}
+  NET.shop0=NET.shop0||renderShop;NET.gsel=null;
+  window.renderShop=function(){NET.gsel=RUN?RUN.sel||null:null;const r=NET.shop0();netShopDecor();return r;};          /* výběr schopnosti je u hosta jen jeho */
+  window.buyAbility=function(c,i,id){NET.gsel=null;if(RUN)RUN.sel=null;netSend({t:'buy',c,i,id});SF('card');};
+  UI.live=false;endTut();hideMenu();closeModal();netBar();}
+
+/* ---------- zprávy ---------- */
+function netOnMsg(m){if(!m||m.from===NET.id||!NET.role)return;
+  if(NET.role==='host'){let p=NET.players.findIndex(q=>q.id===m.from);if(p>=0)NET.players[p].seen=Date.now();
+    if(m.t==='hello'){if(m.v!==VERSION){netSend({t:'reject',to:m.from,why:`Máte jinou verzi hry (hostitel ${VERSION}, ty ${m.v}). Obnovte oba stránku.`});return;}
+      const re=NET.players.findIndex(q=>q.name===m.name&&q.on===false);
+      if(re>=0){NET.players[re].id=m.from;NET.players[re].on=true;NET.players[re].seen=Date.now();if(NET.started){netSend({t:'start',to:m.from,own:MP.own,players:NET.players.map(q=>({id:q.id,name:q.name}))});NET.lastSt='';netQueueState(true);netBar();}else netBroadcastLobby();return;}
+      if(p>=0){if(!NET.started)netBroadcastLobby();return;}
+      if(NET.started){netSend({t:'reject',to:m.from,why:'Tahle hra už běží. Připojit se dá jen hráč, který se odpojil (pod stejným jménem).'});return;}
+      if(NET.players.length>=4){netSend({t:'reject',to:m.from,why:'Hra je plná (4 hráči).'});return;}
+      let nm=String(m.name||'Hráč').slice(0,16);while(NET.players.some(q=>q.name===nm))nm+='²';
+      NET.players.push({id:m.from,name:nm,on:true,seen:Date.now()});NET.lobby.own=null;netBroadcastLobby();SF('clink');return;}
+    if(p<0)return;
+    if(m.t==='bye'){if(!NET.started){NET.players.splice(p,1);NET.lobby.own=null;netBroadcastLobby();}else{NET.players[p].on=false;netBar();netQueueState(true);}return;}
+    if(m.t==='ltake'){netTake(p,m.cid);return;}
+    if(m.t==='lname'){netRename(p,m.cid,String(m.name||'').slice(0,14),true);return;}
+    if(!NET.started)return;
+    if(m.t==='click'){netHostClick(p,m);return;}
+    if(m.t==='key'){netHostKey(p,m.k);return;}
+    if(m.t==='buy'){if((MP.own[p]||[]).includes(m.c)&&RUN&&RUN.offers.includes(m.id)){const sel=RUN.sel;buyAbility(m.c,m.i,m.id);RUN.sel=sel&&RUN.offers.includes(sel)?sel:null;netQueueState(true);}return;}
+    if(m.t==='rename'){netRename(p,m.cid,String(m.name||'').slice(0,14));return;}
+    if(m.t==='hi'){NET.lastSt='';netQueueState(true);return;}
+    return;}
+  /* host */
+  if(m.to&&m.to!==NET.id)return;
+  if(m.t==='reject'){const w=m.why;netReset();showNetMenu(w);return;}
+  if(NET.hostId&&m.from!==NET.hostId)return;
+  NET.hostSeen=Date.now();
+  if(m.t==='lobby'){if(!NET.hostId){NET.hostId=m.from;clearTimeout(NET.joinT);}if(!m.players.some(p=>p.id===NET.id)){netSend({t:'hello',name:NET.name,v:VERSION});return;}if(!NET.started)renderNetLobby(m);return;}
+  if(m.t==='start'){NET.hostId=m.from;clearTimeout(NET.joinT);netGuestStart(m);netSend({t:'hi'});return;}
+  if(m.t==='st'||m.t==='act'){if(!NET.started)return;if(m.t==='st'){NET.q=NET.q.filter(x=>x.t!=='st');}NET.q.push(m);netPump();return;}
+  if(m.t==='relobby'){netGuestRelobby();return;}
+  if(m.t==='bye'){netGuestLost('Hostitel ukončil online hru.');return;}}
+function netBeat(){clearInterval(NET.hb);NET.hb=setInterval(()=>{if(!NET.role)return;netSend({t:'ping'});const now=Date.now();
+  if(NET.role==='host'){let ch=false;NET.players.forEach((p,i)=>{if(i&&p.on!==false&&now-(p.seen||now)>25000){p.on=false;ch=true;}});if(ch){if(NET.started){netBar();netQueueState(true);}else{NET.players=NET.players.filter((p,i)=>!i||p.on!==false);NET.lobby.own=null;netBroadcastLobby();}}}
+  else if(NET.hostId&&now-NET.hostSeen>25000)netGuestLost('Spojení s hostitelem se ztratilo.');},8000);}
+function netGuestLost(why){if(document.getElementById('netlost'))return;const d=document.createElement('div');d.id='netlost';d.innerHTML=`<div><b>${escH(why)}</b><p>Až bude hostitel zpátky, připoj se znovu stejným kódem a jménem.</p><button class="btn primary" onclick="location.reload()">Zpět do menu</button></div>`;document.body.appendChild(d);}
+
+/* ---------- host: posílání stavu ---------- */
+function netView(){return {lag:UI.lag,oxyLag:UI.oxyLag,wDisp:UI.wDisp,leftDisp:UI.leftDisp,noOxDisp:UI.noOxDisp,pending:UI.pending,endConfirm:UI.endConfirm,own:MP.own,ready:MP.ready,
+  players:NET.players.map(p=>({name:p.name,on:p.on!==false}))};}
+function netScr(){const md=document.getElementById('modal'),mb=document.getElementById('mbox'),rm=document.getElementById('rmap'),cf=document.getElementById('mconf');
+  const modal=md&&!md.hidden&&mb&&!mb.classList.contains('bookbox')&&!UI.localModal?{html:mb.innerHTML,cls:mb.className}:null;
+  return {map:!!(rm&&!rm.hidden),conf:cf?((cf.querySelector('[data-mgo]')||{dataset:{}}).dataset.mgo||null):null,modal};}
+function netQueueState(now){if(NET.role!=='host'||!NET.started)return;clearTimeout(NET.stT);NET.stT=setTimeout(netSendState,now?20:120);}
+function netSendState(){if(NET.role!=='host'||!NET.started)return;if(UI.playing){netQueueState();return;}
+  const g=NET.snapDirty&&NET.snapG?NET.snapG:(G?JSON.stringify(G):null);NET.snapDirty=false;
+  const body={t:'st',G:g,RUN:RUN?JSON.stringify(RUN):null,view:netView(),scr:netScr()};const key=JSON.stringify(body);if(key===NET.lastSt)return;NET.lastSt=key;netSend(body);netBar();}
+function netSendAct(){const body={t:'act',G:NET.snapG||JSON.stringify(G),RUN:RUN?JSON.stringify(RUN):null,view:netView(),scr:netScr(),fr:NET.snapFr||[],seq:JSON.stringify(SEQ)};NET.lastSt='';netSend(body);}
+
+/* ---------- host: příkazy od hostů ---------- */
+function netCtx(el){return ['marks','actions','crewList','tokens','mbox','rmap'].find(id=>el.closest('#'+id))||null;}
+const NET_SEL='#marks button,#marks [data-a],#actions button,#crewList .crew,#tokens .tok,#mbox button,#mbox [data-offer],#mbox [data-slot],#rmap [data-node],#rmap button';
+function netOwnerOff(s){const p=NET.players[s];return !p||p.on===false;}
+function netAllowed(p,el,ctx){const own=(MP.own[p]||[]).slice(),lead=p===0;if(lead)MP.own.forEach((l,s)=>{if(s&&netOwnerOff(s))own.push(...l);});   /* za odpojené hraje hostitel */
+  const a=G&&G.active!=null?G.chars[G.active]:null,myA=!!a&&own.includes(a.id);
+  if(ctx==='rmap')return lead;
+  if(ctx==='crewList'||ctx==='tokens'){const c=+el.dataset.c;if(isNaN(c))return lead;if(!own.includes(c))return false;if(a&&a.id!==c&&a.started&&!own.includes(a.id))return false;return true;}
+  if(ctx==='marks')return myA;
+  if(ctx==='actions'){if(el.dataset.a==='endall')return lead;if(!a)return lead;return myA;}
+  if(ctx==='mbox'){const mb=document.getElementById('mbox');if(!mb.classList.contains('shopbox'))return lead;
+    const raw=el.dataset.cid??el.dataset.up??el.dataset.slot??el.dataset.rrnd;if(raw!=null){const c=+String(raw).split('|')[0];return own.includes(c);}
+    if(el.dataset.offer)return true;const da=el.dataset.a;if(da==='buytime'||da==='nextlvl')return true;return lead;}
+  return lead;}
+function netNeedReady(){return MP.own.map((l,s)=>(l||[]).some(c=>RUN&&RUN.chars[c]&&RUN.chars[c].alive)&&!(s&&netOwnerOff(s))?s:-1).filter(s=>s>=0);}
+function netNextLvl(p){if(NET.bypassNext){NET.bypassNext=false;MP.ready=[];return true;}MP.ready[p]=true;const need=netNeedReady();if(need.every(s=>MP.ready[s])){MP.ready=[];return true;}netShopDecor();netQueueState(true);netBar();SF('clink');return false;}
+function netHostClick(p,m){const root=document.getElementById(m.ctx);if(!root)return;let el=null;try{el=root.querySelector(m.k);}catch(e){}if(!el||el.disabled)return;
+  if(!netAllowed(p,el,m.ctx)){netQueueState(true);return;}
+  if(el.dataset.a==='nextlvl'&&!netNextLvl(p))return;
+  NET.injecting=true;try{el.click();}finally{NET.injecting=false;}netQueueState();}
+function netHostKey(p,k){if(!G||!G.placing||!(MP.own[p]||[]).includes(G.placing.cid))return;if(k==='r'&&tAllow('rot')){rotatePlacing();SF('tick');}else if(k==='Enter')tryPlace();netQueueState();}
+/* hostitel sám: smí jen své postavy (a za odpojené); na plánu a v dialozích je vedoucí */
+window.addEventListener('click',e=>{if(!NET.started||NET.injecting)return;const t=e.target;
+  if(NET.role==='host'){const nr=t.closest('#mbox [data-a="newrun"]');if(nr){e.stopPropagation();e.preventDefault();netRelobby();return;}
+    const el=t.closest(NET_SEL);if(!el)return;const ctx=netCtx(el);if(!ctx)return;
+    if(!netAllowed(0,el,ctx)){e.stopPropagation();e.preventDefault();netToast('Tohle je postava jiného hráče.');return;}
+    if(el.dataset.a==='nextlvl'&&!netNextLvl(0)){e.stopPropagation();e.preventDefault();return;}
+    setTimeout(()=>netQueueState(),0);return;}
+  if(NET.role==='guest'){
+    if(t.closest('#bNew')){e.stopPropagation();e.preventDefault();netGameMenu();return;}
+    if(t.closest('#bUndo')){e.stopPropagation();e.preventDefault();return;}
+    if(t.closest('#netlost')||t.closest('#menu'))return;
+    const el=t.closest(NET_SEL);if(!el)return;const ctx=netCtx(el);if(!ctx)return;
+    if(el.dataset.offer!=null)return;   /* výběr schopnosti řeší lokální obchod (klik / tažení) */
+    e.stopPropagation();e.preventDefault();if(el.disabled)return;
+    if(el.dataset.slot!=null&&!t.closest('[data-up]')){if(NET.gsel){const [c,i]=el.dataset.slot.split('|').map(Number);buyAbility(c,i,NET.gsel);}return;}
+    if(ctx==='rmap'||(ctx==='mbox'&&!document.getElementById('mbox').classList.contains('shopbox'))){netToast('Tohle ovládá hostitel.');return;}
+    netSend({t:'click',k:keyOf(el),ctx});SF('tick',.5);}},true);
+window.addEventListener('keydown',e=>{if(NET.role!=='guest'||!NET.started)return;if(e.target&&e.target.matches&&e.target.matches('input,textarea'))return;
+  if(e.key==='r'||e.key==='R'||e.key==='Enter'){netSend({t:'key',k:e.key==='Enter'?'Enter':'r'});e.stopPropagation();e.preventDefault();}
+  else if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.stopPropagation();e.preventDefault();}},true);
+document.addEventListener('input',e=>{const t=e.target;if(NET.role!=='guest'||!NET.started||!t||!t.dataset||t.dataset.rn==null)return;const v=t.value.trim().slice(0,14);if(v)netSend({t:'rename',cid:+t.dataset.rn,name:v});},true);
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-rrnd]');if(!b||NET.role!=='host'||!NET.started)return;setTimeout(()=>netQueueState(),0);});
+
+/* ---------- host: obaly kolem renderu a animací ---------- */
+(function(){const R0=render;
+  render=function(){if(NET.role==='host'&&NET.started&&G&&UI.ready){NET.snapG=JSON.stringify(G);NET.snapFr=[...fresh.keys()];NET.snapDirty=true;}
+    const r=R0.apply(this,arguments);if(NET.started){netLockUI();if(NET.role==='host')netQueueState();}return r;};
+  const P0=playSeq;playSeq=function(){if(NET.role==='host'&&NET.started&&SEQ.length&&!UI.playing)netSendAct();const p=P0.apply(this,arguments);
+    if(NET.role==='host'&&NET.started&&p&&p.then)p.then(()=>netQueueState());return p;};
+  ['openModal','closeModal','showMap','hideMap','openConf','closeConf','renderShop','renderMap'].forEach(fn=>{const F=window[fn];if(typeof F!=='function')return;
+    window[fn]=function(){const r=F.apply(this,arguments);if(NET.role==='host'&&NET.started){if(fn==='renderShop')netShopDecor();netQueueState();}return r;};});})();
+
+/* ---------- host: obrazovka u hosta (hosté) ---------- */
+function netPump(){if(NET.role!=='guest'||UI.playing||NET.pumping)return;const m=NET.q.shift();if(!m)return;NET.pumping=true;try{netApply(m);}catch(e){console.error(e);}NET.pumping=false;}
+setInterval(()=>{if(NET.role==='guest'&&NET.q.length&&!UI.playing)netPump();},90);
+setInterval(()=>{if(NET.role==='host'&&NET.started&&!UI.playing)netSendState();},700);   /* zachytí i změny mimo render (odkrytí obchodu apod.) */
+function netApply(m){
+  if(m.RUN){RUN=JSON.parse(m.RUN);if(NET.gsel&&!RUN.offers.includes(NET.gsel))NET.gsel=null;RUN.sel=NET.gsel;}
+  if(m.G){const g=JSON.parse(m.G),key=`${RUN&&RUN.act}|${RUN&&RUN.level}|${g.node}|${g.board.length}`;
+    if(key!==NET.lvlKey){NET.lvlKey=key;G=g;setSize('9x'+Math.round(g.board.length/9));resetView();NET.needCam=true;}else G=g;}
+  const v=m.view||{};UI.lag=v.lag||{};UI.oxyLag=v.oxyLag||{};UI.wDisp=v.wDisp??null;UI.leftDisp=v.leftDisp??null;UI.noOxDisp=v.noOxDisp||null;UI.pending=v.pending??null;UI.endConfirm=v.endConfirm||null;
+  if(v.own)MP.own=v.own;MP.ready=v.ready||[];NET.readyKey=JSON.stringify(MP.ready);if(v.players)NET.players.forEach((p,i)=>{if(v.players[i])p.on=v.players[i].on;});
+  if(m.fr&&m.fr.length)fresh=new Map(m.fr.map((k,i)=>[k,i]));
+  if(m.seq){try{SEQ=JSON.parse(m.seq);}catch(e){SEQ=[];}}
+  netScreen(m.scr||{});
+  if(G&&!(m.scr&&m.scr.map)){render();if(NET.needCam){NET.needCam=false;initCam();}}
+  netBar();}
+function netScreen(s){const rm=document.getElementById('rmap');
+  if(s.map){const m=mapEl();if(m.hidden||NET.mapRun!==RUN){m.hidden=false;UI.onMap=true;renderMap();NET.mapRun=RUN;}}
+  else if(rm&&!rm.hidden){rm.hidden=true;UI.onMap=false;}
+  const cf=document.getElementById('mconf'),cid=cf?((cf.querySelector('[data-mgo]')||{dataset:{}}).dataset.mgo||null):null;
+  if(s.conf&&s.conf!==cid)openConf(s.conf);else if(!s.conf&&cf)closeConf();
+  const md=document.getElementById('modal'),mb=document.getElementById('mbox');
+  if(s.modal){const ae=document.activeElement,typing=ae&&mb.contains(ae)&&ae.matches('input');
+    if(/shopbox/.test(s.modal.cls)&&RUN&&!RUN.intro&&NET.shop0){if(!typing){md.hidden=false;NET.shop0();netShopDecor();}}
+    else{if(!typing&&mb.innerHTML!==s.modal.html)mb.innerHTML=s.modal.html;mb.className=s.modal.cls;}md.hidden=false;NET.modalFromHost=true;}
+  else if(NET.modalFromHost){md.hidden=true;NET.modalFromHost=false;}}
+/* zámek: cizí postava na tahu → bez značek a tlačítek */
+function netLockUI(){if(!NET.started||!G)return;const me=NET.role==='host'?0:NET.players.findIndex(p=>p.id===NET.id);let own=(MP.own[me]||[]).slice();
+  if(NET.role==='host')MP.own.forEach((l,s)=>{if(s&&netOwnerOff(s))own.push(...l);});
+  const a=G.active!=null?G.chars[G.active]:null,foreign=!!a&&!own.includes(a.id),mk=document.getElementById('marks'),ac=document.getElementById('actions');
+  if(mk)mk.classList.toggle('netlock',foreign);if(ac)ac.classList.toggle('netlock',foreign);
+  if(foreign&&ac&&!ac.querySelector('.netwho')){const o=MP.own.findIndex(l=>l.includes(a.id));ac.insertAdjacentHTML('afterbegin',`<div class="netwho">Na tahu: <b style="color:${shade(a.color,.35)}">${escH(a.name)}</b> · hraje ${escH((NET.players[o]||{}).name||'jiný hráč')}</div>`);}}
+function netBar(){if(!NET.started)return;let b=document.getElementById('netbar');if(!b){b=document.createElement('div');b.id='netbar';document.body.appendChild(b);}
+  const me=NET.role==='host'?0:NET.players.findIndex(p=>p.id===NET.id),shop=!document.getElementById('modal').hidden&&document.getElementById('mbox').classList.contains('shopbox');
+  const need=shop&&NET.role==='host'?netNeedReady():null,wait=shop?NET.players.map((p,i)=>MP.ready[i]?null:p.name).filter(Boolean):[];
+  b.innerHTML=`<span class="nb-k">ONLINE β · ${escH(NET.code||'')}</span>${NET.players.map((p,i)=>`<span class="nb-p ${p.on===false?'off':''} ${i===me?'me':''}" style="--pc:${NET_COLS[i]}">${i===0?'👑':''}${escH(p.name)}${p.on===false?' (odpojen)':''}</span>`).join('')}${shop&&wait.length?`<span class="nb-w">obchod: čeká se na ${wait.map(escH).join(', ')}</span>`:''}`;}
+function netToast(t){let d=document.getElementById('nettoast');if(!d){d=document.createElement('div');d.id='nettoast';document.body.appendChild(d);}d.textContent=t;d.classList.remove('on');void d.offsetWidth;d.classList.add('on');clearTimeout(d._t);d._t=setTimeout(()=>d.classList.remove('on'),1800);}
+function netGameMenu(){const m=menuEl();m.hidden=false;UI.inMenu=true;const host=NET.role==='host';
+  m.innerHTML=`<div class="mwrap"><div class="mtitle"><span class="mt-k">ONLINE β · ${escH(NET.code||'')}</span><h1 style="font-size:40px">Menu</h1><p>${host?'Hraješ jako hostitel: hra běží a ukládá se u tebe. Kamarádi se můžou kdykoli znovu připojit kódem '+escH(NET.code||''):'Hraješ online u hostitele, hra se ukládá u něj.'}</p></div>
+  <div class="mbtns"><button class="mbtn primary" data-menu="back">Zpět do hry</button>${host&&liveSaveData()?'<button class="mbtn" data-menu="save">Uložit hru<small>pojmenovaná uložená hra, i jako soubor</small></button>':''}<button class="mbtn" data-menu="rules">Pravidla</button>
+  <button class="mbtn ghost" data-netquit="1">${host?'Ukončit online hru':'Odejít z online hry'}<small>${host?'hra zůstane uložená, půjde v ní pokračovat':'hostitel za tvoje postavy dohraje'}</small></button></div><div class="mver">verze ${VERSION}</div></div>`;}
+document.addEventListener('click',e=>{if(!e.target.closest('[data-netquit]'))return;if(NET.role==='host'){try{saveGame();}catch(x){}}netSend({t:'bye'});setTimeout(()=>location.reload(),150);});
+(function(){const S0=showMenu;showMenu=function(sub){if(NET.started&&!sub){netGameMenu();return;}return S0.apply(this,arguments);};})();
+/* nová výprava po prohře: stejní hráči, stejný kód, zpátky do online lobby */
+function netRelobby(){if(NET.role!=='host')return;closeModal();clearSave();NET.started=false;MP.on=false;MP.ready=[];
+  NET.players=NET.players.filter((p,i)=>!i||p.on!==false);
+  NET.lobby={mode:'new',diff:(RUN&&RUN.diff)||'normal',sv:null,names:(()=>{const p=shuffle(NAMES.slice());return CHARS.map((c,i)=>p[i]);})(),own:null};
+  hideMap();const b=document.getElementById('netbar');if(b)b.remove();netSend({t:'relobby'});netBroadcastLobby();}
+function netGuestRelobby(){if(NET.orig)for(const k in NET.orig)window[k]=NET.orig[k];NET.started=false;MP.on=false;NET.q=[];NET.lvlKey='';NET.gsel=null;closeModal();hideMap();
+  const b=document.getElementById('netbar');if(b)b.remove();renderNetLobby(null,'Hostitel zakládá novou výpravu…');}
+
+function netMe(){return NET.role==='host'?0:NET.players.findIndex(p=>p.id===NET.id);}
+/* obchod: cizí sloty ztlumit, u tlačítka dál ukázat, kdo už je hotový */
+function netShopDecor(){if(!NET.started)return;const mb=document.getElementById('mbox');if(!mb.classList.contains('shopbox'))return;const me=netMe(),own=MP.own[me]||[];
+  if(NET.role==='guest')mb.querySelectorAll('[data-slot]').forEach(el=>{const c=+el.dataset.slot.split('|')[0];if(!own.includes(c)){el.classList.remove('tgt');if(RUN&&RUN.sel)el.classList.add('dim');}});
+  const nx=mb.querySelector('[data-a="nextlvl"]');if(!nx)return;
+  if(MP.ready[me]){nx.textContent='✓ Hotovo · čeká se na ostatní';nx.classList.add('netready');}
+  if(NET.role==='guest'){const cl=mb.querySelector('[data-a="close"]');if(cl)cl.remove();}}
 
 </script>
